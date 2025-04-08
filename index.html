@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мой сайт с API</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        #api-data {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #0366d6;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0356b6;
+        }
+    </style>
+</head>
+<body>
+    <h1>Мой сайт с подключением к API</h1>
+    <p>Это статический сайт на GitHub Pages, который получает данные с вашего API.</p>
+    
+    <button id="fetch-data">Получить данные с API</button>
+    
+    <div id="api-data">
+        Данные с API появятся здесь...
+    </div>
+
+    <script>
+        document.getElementById('fetch-data').addEventListener('click', async () => {
+            const apiUrl = 'https://https://217.182.127.214:443'; // Замените на ваш API URL
+            const outputDiv = document.getElementById('api-data');
+            
+            try {
+                outputDiv.textContent = "Загружаю данные...";
+                
+                // Добавляем параметры для CORS
+                const response = await fetch(apiUrl, {
+                    mode: 'cors', // Важно для запросов между разными доменами
+                    headers: {
+                        'Content-Type': 'application/json',
+                        // Добавьте другие заголовки при необходимости
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Ошибка HTTP: ${response.status}`);
+                }
+
+                const data = await response.json();
+                outputDiv.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+            } catch (error) {
+                outputDiv.textContent = `Ошибка: ${error.message}`;
+                console.error('Ошибка при запросе:', error);
+            }
+        });
+    </script>
+</body>
+</html>
